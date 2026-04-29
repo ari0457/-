@@ -1,60 +1,51 @@
 ﻿using System;
 
-interface IUser
+interface ICommand
 {
-    string GetPermissions();
+    void Execute();
 }
 
-class AdminUser : IUser
+class BankAccountService
 {
-    public string GetPermissions()
+    public void Transfer(decimal amount, string fromAccount, string toAccount)
     {
-        return "Полный доступ: чтение, запись, удаление, управление пользователями";
+        Console.WriteLine($"Перевод {amount} руб. со счета {fromAccount} на счет {toAccount} выполнен");
     }
 }
 
-class ModeratorUser : IUser
+class TransferMoneyCommand : ICommand
 {
-    public string GetPermissions()
+    private BankAccountService receiver;
+    private decimal amount;
+    private string fromAccount;
+    private string toAccount;
+
+    public TransferMoneyCommand(BankAccountService receiver, decimal amount, string fromAccount, string toAccount)
     {
-        return "Модерация: удаление контента, блокировка пользователей";
+        this.receiver = receiver;
+        this.amount = amount;
+        this.fromAccount = fromAccount;
+        this.toAccount = toAccount;
+    }
+
+    public void Execute()
+    {
+        receiver.Transfer(amount, fromAccount, toAccount);
     }
 }
 
-class RegularUser : IUser
+class BankingTerminal
 {
-    public string GetPermissions()
+    private ICommand command;
+
+    public void SetCommand(ICommand command)
     {
-        return "Базовый доступ: чтение, комментирование";
+        this.command = command;
     }
-}
 
-abstract class UserFactory
-{
-    public abstract IUser CreateUser();
-}
-
-class AdminFactory : UserFactory
-{
-    public override IUser CreateUser()
+    public void ExecuteCommand()
     {
-        return new AdminUser();
-    }
-}
-
-class ModeratorFactory : UserFactory
-{
-    public override IUser CreateUser()
-    {
-        return new ModeratorUser();
-    }
-}
-
-class RegularFactory : UserFactory
-{
-    public override IUser CreateUser()
-    {
-        return new RegularUser();
+        command.Execute();
     }
 }
 
@@ -62,17 +53,21 @@ class Program
 {
     static void Main()
     {
-        UserFactory[] factories = new UserFactory[]
-        {
-            new AdminFactory(),
-            new ModeratorFactory(),
-            new RegularFactory()
-        };
+        BankAccountService service = new BankAccountService();
 
-        foreach (UserFactory factory in factories)
-        {
-            IUser user = factory.CreateUser();
-            Console.WriteLine($"{user.GetType().Name}: {user.GetPermissions()}");
-        }
+        TransferMoneyCommand transfer1 = new TransferMoneyCommand(service, 500, "123456", "654321");
+        TransferMoneyCommand transfer2 = new TransferMoneyCommand(service, 1200, "111111", "222222");
+        TransferMoneyCommand transfer3 = new TransferMoneyCommand(service, 75, "333333", "444444");
+
+        BankingTerminal terminal = new BankingTerminal();
+
+        terminal.SetCommand(transfer1);
+        terminal.ExecuteCommand();
+
+        terminal.SetCommand(transfer2);
+        terminal.ExecuteCommand();
+
+        terminal.SetCommand(transfer3);
+        terminal.ExecuteCommand();
     }
 }
