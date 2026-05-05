@@ -1,0 +1,180 @@
+﻿<Window x:Class="HotelBookingApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:HotelBookingApp.ViewModels"
+        Title="Система бронирования отеля" Height="620" Width="900"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+
+    <Window.InputBindings>
+        <KeyBinding Key="N" Modifiers="Ctrl" Command="{Binding BookRoomCommand}"/>
+        <KeyBinding Key="E" Modifiers="Ctrl" Command="{Binding EditBookingCommand}"/>
+        <KeyBinding Key="D" Modifiers="Ctrl" Command="{Binding CancelBookingCommand}"/>
+        <KeyBinding Key="Delete"             Command="{Binding CancelBookingCommand}"/>
+    </Window.InputBindings>
+
+    <Window.Resources>
+
+        <ControlTemplate x:Key="BookButtonTemplate" TargetType="Button">
+            <Border x:Name="border" CornerRadius="6" Background="#2980B9"
+                    Padding="12,6" Cursor="Hand">
+                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="border" Property="Background" Value="#1A6FA8"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter TargetName="border" Property="Background" Value="#145880"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter TargetName="border" Property="Background" Value="#BDC3C7"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <DataTemplate x:Key="RoomCardTemplate">
+            <Border BorderBrush="#DDE1E7" BorderThickness="1" CornerRadius="6"
+                    Margin="3" Padding="10" Background="White">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock FontWeight="Bold" FontSize="14"
+                                   Text="{Binding Number, StringFormat='Номер №{0}', Mode=OneWay}"/>
+                        <TextBlock Foreground="#555"
+                                   Text="{Binding Type, Mode=OneWay}"/>
+                        <TextBlock Foreground="#2980B9" FontWeight="SemiBold"
+                                   Text="{Binding PricePerNight, StringFormat='{}{0} руб./ночь', Mode=OneWay}"/>
+                    </StackPanel>
+                    <Border Grid.Column="1" CornerRadius="4" Padding="8,4"
+                            Background="{Binding StatusColor, Mode=OneWay}"
+                            VerticalAlignment="Center">
+                        <TextBlock Text="{Binding StatusText, Mode=OneWay}"
+                                   Foreground="White" FontWeight="Bold" FontSize="12"/>
+                    </Border>
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Key="BookingCardTemplate">
+            <Border BorderBrush="#DDE1E7" BorderThickness="1" CornerRadius="6"
+                    Margin="3" Padding="10" Background="White">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Grid.Row="0" Grid.Column="0"
+                             Text="{Binding GuestName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             FontWeight="Bold" FontSize="14" BorderThickness="0"
+                             Background="Transparent"/>
+                    <TextBox Grid.Row="1" Grid.Column="0"
+                             Text="{Binding GuestPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Foreground="#555" BorderThickness="0" Background="Transparent"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0"
+                               Foreground="#7F8C8D" FontSize="12"
+                               Text="{Binding DateRange, Mode=OneWay}"/>
+
+                    <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="3"
+                                VerticalAlignment="Center" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding RoomNumber, StringFormat='№{0}', Mode=OneWay}"
+                                   FontWeight="Bold" FontSize="16" Foreground="#2980B9"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding TotalPrice, StringFormat='{}{0} руб.', Mode=OneWay}"
+                                   Foreground="#27AE60" FontWeight="SemiBold"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+    </Window.Resources>
+
+    <DockPanel LastChildFill="True">
+
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Выход" Click="Exit_Click" InputGestureText="Alt+F4"/>
+            </MenuItem>
+            <MenuItem Header="Номера">
+                <MenuItem Header="Список номеров" IsEnabled="False"/>
+            </MenuItem>
+            <MenuItem Header="Бронирование">
+                <MenuItem Header="Забронировать"  Command="{Binding BookRoomCommand}"      InputGestureText="Ctrl+N"/>
+                <MenuItem Header="Редактировать"  Command="{Binding EditBookingCommand}"   InputGestureText="Ctrl+E"/>
+                <MenuItem Header="Отменить бронь" Command="{Binding CancelBookingCommand}" InputGestureText="Ctrl+D"/>
+            </MenuItem>
+            <MenuItem Header="Настройки">
+                <MenuItem Header="О программе" Click="About_Click"/>
+            </MenuItem>
+        </Menu>
+
+        <ToolBar DockPanel.Dock="Top">
+            <Button Command="{Binding BookRoomCommand}"
+                    Template="{StaticResource BookButtonTemplate}"
+                    ToolTip="Забронировать (Ctrl+N)" Margin="3,2">
+                <TextBlock Text="📅  Забронировать" Foreground="White" FontWeight="SemiBold"/>
+            </Button>
+            <Separator/>
+            <Button Command="{Binding EditBookingCommand}"
+                    Template="{StaticResource BookButtonTemplate}"
+                    ToolTip="Редактировать (Ctrl+E)" Margin="3,2">
+                <TextBlock Text="✏️  Редактировать" Foreground="White" FontWeight="SemiBold"/>
+            </Button>
+            <Separator/>
+            <Button Command="{Binding CancelBookingCommand}"
+                    Template="{StaticResource BookButtonTemplate}"
+                    ToolTip="Отменить (Ctrl+D / Del)" Margin="3,2">
+                <TextBlock Text="❌  Отменить бронь" Foreground="White" FontWeight="SemiBold"/>
+            </Button>
+        </ToolBar>
+
+        <StatusBar DockPanel.Dock="Bottom" Background="#F0F0F0">
+            <StatusBarItem>
+                <TextBlock Text="Система бронирования отеля v2.0"/>
+            </StatusBarItem>
+        </StatusBar>
+
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="🏨 Номера"
+                       FontSize="16" FontWeight="Bold" Margin="5,0,5,5"/>
+            <ListBox Grid.Row="1" Grid.Column="0" Margin="5"
+                     ItemsSource="{Binding Rooms}"
+                     SelectedItem="{Binding SelectedRoom}"
+                     ItemTemplate="{StaticResource RoomCardTemplate}"
+                     Background="#F7F9FC" BorderBrush="#DDE1E7"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="📋 Брони"
+                       FontSize="16" FontWeight="Bold" Margin="5,0,5,5"/>
+            <ListBox Grid.Row="1" Grid.Column="1" Margin="5"
+                     ItemsSource="{Binding Bookings}"
+                     SelectedItem="{Binding SelectedBooking}"
+                     ItemTemplate="{StaticResource BookingCardTemplate}"
+                     Background="#F7F9FC" BorderBrush="#DDE1E7"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+        </Grid>
+
+    </DockPanel>
+</Window>

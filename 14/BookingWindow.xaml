@@ -1,0 +1,58 @@
+﻿<Window x:Class="HotelBookingApp.BookingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Бронирование номера" Height="360" Width="420"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="110"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Номер:"
+                   VerticalAlignment="Center" FontWeight="Bold"/>
+        <ComboBox x:Name="RoomCombo" Grid.Row="0" Grid.Column="1" Margin="5" Height="28"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="ФИО гостя:"
+                   VerticalAlignment="Center" FontWeight="Bold"/>
+        <TextBox x:Name="GuestNameBox" Grid.Row="1" Grid.Column="1" Margin="5" Height="28"/>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Телефон:"
+                   VerticalAlignment="Center" FontWeight="Bold"/>
+        <TextBox x:Name="GuestPhoneBox" Grid.Row="2" Grid.Column="1" Margin="5" Height="28"/>
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Дата заезда:"
+                   VerticalAlignment="Center" FontWeight="Bold"/>
+        <DatePicker x:Name="StartDatePicker" Grid.Row="3" Grid.Column="1" Margin="5" Height="28"/>
+
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="Дата выезда:"
+                   VerticalAlignment="Center" FontWeight="Bold"/>
+        <DatePicker x:Name="EndDatePicker" Grid.Row="4" Grid.Column="1" Margin="5" Height="28"/>
+
+        <TextBlock x:Name="TotalPriceText" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"
+                   Text="Стоимость: 0 руб." HorizontalAlignment="Center"
+                   Margin="8" FontWeight="Bold" FontSize="14"/>
+
+        <TextBlock x:Name="ErrorText" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
+                   Foreground="Red" TextAlignment="Center" TextWrapping="Wrap"/>
+
+        <StackPanel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"
+                    Orientation="Horizontal" HorizontalAlignment="Center" Margin="8">
+            <Button x:Name="SaveButton" Content="Сохранить"
+                    Width="100" Height="32" Margin="5" Background="#27AE60" Foreground="White"/>
+            <Button x:Name="CancelButton" Content="Отмена"
+                    Width="100" Height="32" Margin="5"/>
+        </StackPanel>
+    </Grid>
+</Window>
