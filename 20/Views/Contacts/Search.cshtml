@@ -1,0 +1,53 @@
+﻿@model List<PhoneBook.Models.Contact>
+
+@{
+    ViewData["Title"] = "Поиск контактов";
+}
+
+<div class="container mt-4">
+    <h2>🔍 Поиск по имени</h2>
+
+    <form method="get" action="/Contacts/Search" class="mb-3">
+        <div class="input-group">
+            <input type="text" name="name" class="form-control"
+                   value="@ViewBag.SearchName"
+                   placeholder="Введите имя..." />
+            <button class="btn btn-primary" type="submit">🔍 Найти</button>
+        </div>
+    </form>
+
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert @(Model.Any() ? "alert-success" : "alert-warning")">
+            @ViewBag.Message
+        </div>
+    }
+
+    @if (Model.Any())
+    {
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>ФИО</th>
+                    <th>Телефон</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var contact in Model)
+                {
+                    <tr>
+                        <td>@contact.Id</td>
+                        <td>@contact.Name</td>
+                        <td>@contact.PhoneNumber</td>
+                        <td>@contact.Email</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <a asp-action="Index" asp-controller="Contacts"
+       class="btn btn-secondary mt-2">← Назад к списку</a>
+</div>

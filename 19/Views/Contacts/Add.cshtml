@@ -1,0 +1,35 @@
+﻿@model PhoneBook.Models.Contact
+
+@{
+    ViewData["Title"] = "Добавить контакт";
+}
+
+<div class="container mt-4">
+    <h2>➕ Добавить новый контакт</h2>
+
+    <form asp-action="Add" asp-controller="Contacts" method="post">
+        <div class="mb-3">
+            <label class="form-label">Имя</label>
+            <input asp-for="Name" class="form-control" placeholder="Введите имя" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Номер телефона</label>
+            <input asp-for="PhoneNumber" class="form-control"
+                   placeholder="+7 900 000-00-00" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input asp-for="Email" class="form-control"
+                   placeholder="example@mail.ru" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-success">💾 Сохранить</button>
+        <a asp-action="Index" asp-controller="Contacts"
+           class="btn btn-secondary">← Назад</a>
+    </form>
+</div>

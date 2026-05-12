@@ -1,0 +1,57 @@
+﻿@model PhoneBook.ViewModels.ContactViewModel
+
+@{
+    ViewData["Title"] = "Добавить контакт";
+}
+
+<div class="container mt-4">
+    <h2>➕ Добавить новый контакт</h2>
+
+    <div class="card p-4 shadow-sm" style="max-width: 500px;">
+        <form asp-action="Add" asp-controller="Contacts" method="post">
+
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label fw-bold">ФИО</label>
+                <input asp-for="Name" class="form-control"
+                       placeholder="Иванов Иван Иванович" />
+                <span asp-validation-for="Name" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="PhoneNumber" class="form-label fw-bold">
+                    Номер телефона <span class="text-danger">*</span>
+                </label>
+                <input asp-for="PhoneNumber" class="form-control"
+                       placeholder="+7 900 000-00-00" />
+                <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label fw-bold">
+                    Email <span class="text-danger">*</span>
+                </label>
+                <input asp-for="Email" class="form-control"
+                       placeholder="example@mail.ru" />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success">
+                    💾 Сохранить
+                </button>
+                <a asp-action="Index" asp-controller="Contacts"
+                   class="btn btn-secondary">
+                    ← Отмена
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <p class="text-muted mt-2 small">
+        <span class="text-danger">*</span> — обязательные поля
+    </p>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
