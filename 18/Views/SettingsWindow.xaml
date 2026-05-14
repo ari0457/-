@@ -1,0 +1,67 @@
+<Window x:Class="HotelBooking.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Настройки — Grand Hotel"
+        Width="420" Height="380"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="#F5F6FA">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="#2C3E50" Padding="20,0">
+            <TextBlock Text="⚙️ Настройки системы" FontSize="18" FontWeight="Bold"
+                       Foreground="White" VerticalAlignment="Center"/>
+        </Border>
+
+        <StackPanel Grid.Row="1" Margin="20">
+            <Border Background="White" CornerRadius="10" Padding="16" Margin="0,0,0,12">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="8" Opacity="0.08" ShadowDepth="2"/>
+                </Border.Effect>
+                <StackPanel>
+                    <TextBlock Text="🏨 Информация об отеле" FontSize="14" FontWeight="SemiBold"
+                               Foreground="#2C3E50" Margin="0,0,0,12"/>
+
+                    <TextBlock Text="Название отеля" Style="{StaticResource FieldLabel}"/>
+                    <TextBox x:Name="HotelNameBox" Style="{StaticResource ModernTextBox}" Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Адрес" Style="{StaticResource FieldLabel}"/>
+                    <TextBox x:Name="AddressBox" Style="{StaticResource ModernTextBox}" Margin="0,0,0,10"/>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="16"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Время заезда" Style="{StaticResource FieldLabel}"/>
+                            <ComboBox x:Name="CheckInCombo" Style="{StaticResource ModernComboBox}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Время выезда" Style="{StaticResource FieldLabel}"/>
+                            <ComboBox x:Name="CheckOutCombo" Style="{StaticResource ModernComboBox}"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <Border Grid.Row="2" Background="White" Padding="20,0"
+                BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,1,0,0">
+            <Grid VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="1" Content="💾 Сохранить" Style="{StaticResource SuccessButtonStyle}"
+                        Click="Save_Click" Padding="16,8"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

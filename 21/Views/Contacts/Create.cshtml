@@ -1,0 +1,43 @@
+@model Contact
+@{
+    ViewData["Title"] = "Новый контакт";
+}
+
+<div class="form-page">
+    <div class="form-header">
+        <a href="/" class="back-link">← Назад</a>
+        <h2>Новый контакт</h2>
+    </div>
+
+    <form asp-action="Create" method="post" class="contact-form">
+        @Html.AntiForgeryToken()
+
+        <div class="field">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" placeholder="Иван Иванов" autofocus />
+            <span asp-validation-for="Name" class="error"></span>
+        </div>
+
+        <div class="field">
+            <label asp-for="Phone"></label>
+            <input asp-for="Phone" placeholder="+375 (12) 345-67-89" />
+            <span asp-validation-for="Phone" class="error"></span>
+        </div>
+
+        <div class="field">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" placeholder="example@mail.com" />
+            <span asp-validation-for="Email" class="error"></span>
+        </div>
+
+        <div class="field">
+            <label asp-for="Note"></label>
+            <textarea asp-for="Note" rows="3" placeholder="Любая заметка…"></textarea>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Сохранить</button>
+            <a href="/" class="btn-secondary">Отмена</a>
+        </div>
+    </form>
+</div>

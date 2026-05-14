@@ -1,0 +1,173 @@
+<Window x:Class="HotelBooking.Views.BookingDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Бронирование номера"
+        Width="480" Height="580"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="#F5F6FA">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="70"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="#2C3E50" Padding="20,0">
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock x:Name="DialogTitle" Text="📝 Новое бронирование"
+                           FontSize="18" FontWeight="Bold" Foreground="White"/>
+                <TextBlock Text="Заполните данные клиента и выберите даты"
+                           FontSize="12" Foreground="#BDC3C7"/>
+            </StackPanel>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="20">
+                <Border Background="White" CornerRadius="10" Padding="16" Margin="0,0,0,12">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="8" Opacity="0.08" ShadowDepth="2"/>
+                    </Border.Effect>
+                    <StackPanel>
+                        <TextBlock Text="🏠 Выбор номера" FontSize="14" FontWeight="SemiBold"
+                                   Foreground="#2C3E50" Margin="0,0,0,10"/>
+                        <TextBlock Text="Номер" Style="{StaticResource FieldLabel}"/>
+                        <ComboBox x:Name="RoomCombo" Style="{StaticResource ModernComboBox}"
+                                  SelectedItem="{Binding SelectedRoom}"
+                                  SelectionChanged="RoomCombo_SelectionChanged">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontWeight="SemiBold">
+                                            <Run Text="№"/>
+                                            <Run Text="{Binding Number}"/>
+                                        </TextBlock>
+                                        <TextBlock Foreground="#7F8C8D" Margin="8,0">
+                                            <Run Text="{Binding Type}"/>
+                                            <Run Text=" — "/>
+                                            <Run Text="{Binding PricePerNight, StringFormat={}{0:N0} ₽/ночь}"/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <Border x:Name="PricePreview" Background="#F0F7FF" CornerRadius="6"
+                                Padding="12,8" Margin="0,8,0,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Foreground="#3498DB" FontSize="12">
+                                    <Run Text="{Binding Nights}"/>
+                                    <Run Text=" ночей"/>
+                                </TextBlock>
+                                <TextBlock Grid.Column="1" FontWeight="Bold" FontSize="16" Foreground="#2C3E50">
+                                    <Run Text="{Binding TotalPrice, StringFormat={}{0:N0} ₽}"/>
+                                </TextBlock>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="White" CornerRadius="10" Padding="16" Margin="0,0,0,12">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="8" Opacity="0.08" ShadowDepth="2"/>
+                    </Border.Effect>
+                    <StackPanel>
+                        <TextBlock Text="📅 Даты проживания" FontSize="14" FontWeight="SemiBold"
+                                   Foreground="#2C3E50" Margin="0,0,0,10"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Дата заезда" Style="{StaticResource FieldLabel}"/>
+                                <DatePicker x:Name="CheckInPicker"
+                                            SelectedDate="{Binding CheckIn, Mode=TwoWay}"
+                                            DisplayDateStart="{x:Static System:DateTime.Today}"
+                                            FontSize="13" BorderBrush="#BDC3C7" BorderThickness="1"
+                                            xmlns:System="clr-namespace:System;assembly=mscorlib"
+                                            SelectedDateChanged="DatePicker_Changed"/>
+                            </StackPanel>
+                            <TextBlock Grid.Column="1" Text="→" VerticalAlignment="Bottom"
+                                       Margin="0,0,0,4" HorizontalAlignment="Center"
+                                       Foreground="#7F8C8D" FontSize="16"/>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Дата выезда" Style="{StaticResource FieldLabel}"/>
+                                <DatePicker x:Name="CheckOutPicker"
+                                            SelectedDate="{Binding CheckOut, Mode=TwoWay}"
+                                            FontSize="13" BorderBrush="#BDC3C7" BorderThickness="1"
+                                            SelectedDateChanged="DatePicker_Changed"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="White" CornerRadius="10" Padding="16" Margin="0,0,0,12">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="8" Opacity="0.08" ShadowDepth="2"/>
+                    </Border.Effect>
+                    <StackPanel>
+                        <TextBlock Text="👤 Данные клиента" FontSize="14" FontWeight="SemiBold"
+                                   Foreground="#2C3E50" Margin="0,0,0,10"/>
+
+                        <TextBlock Text="ФИО *" Style="{StaticResource FieldLabel}"/>
+                        <TextBox Style="{StaticResource ModernTextBox}"
+                                 Text="{Binding ClientFullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Телефон *" Style="{StaticResource FieldLabel}"/>
+                        <TextBox Style="{StaticResource ModernTextBox}"
+                                 Text="{Binding ClientPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Email" Style="{StaticResource FieldLabel}"/>
+                        <TextBox Style="{StaticResource ModernTextBox}"
+                                 Text="{Binding ClientEmail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="#FEF2F2" CornerRadius="6" Padding="12,8"
+                        Visibility="{Binding ValidationError, Converter={StaticResource ValidationErrorToVisibility}}">
+                    <TextBlock Text="{Binding ValidationError}" Foreground="#DC2626"
+                               FontSize="12" TextWrapping="Wrap"/>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Border Grid.Row="2" Background="White" Padding="20,0"
+                BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,1,0,0">
+            <Grid VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="1" Content="Отмена" Click="Cancel_Click"
+                        Background="#ECF0F1" Foreground="#2C3E50"
+                        BorderThickness="0" Padding="16,8" FontSize="13"
+                        Cursor="Hand" Margin="0,0,8,0">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="b" Background="{TemplateBinding Background}"
+                                    CornerRadius="6" Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="b" Property="Background" Value="#D5DBDB"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button Grid.Column="2" Content="✅ Подтвердить" Click="Confirm_Click"
+                        Style="{StaticResource SuccessButtonStyle}" Padding="16,8"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

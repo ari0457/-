@@ -1,0 +1,59 @@
+@model IEnumerable<Contact>
+@{
+    ViewData["Title"] = "Телефонная книга";
+}
+
+<div class="page-header">
+    <h1>Контакты</h1>
+    <form method="get" class="search-form">
+        <input type="text" name="search" value="@ViewBag.Search" placeholder="Поиск по имени, телефону, email…" />
+        <button type="submit">🔍</button>
+        @if (!string.IsNullOrEmpty(ViewBag.Search))
+        {
+            <a href="/" class="clear-search">✕</a>
+        }
+    </form>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <p>@(string.IsNullOrEmpty(ViewBag.Search) ? "Контактов пока нет." : "Ничего не найдено.")</p>
+        @if (string.IsNullOrEmpty(ViewBag.Search))
+        {
+            <a href="/Contacts/Create" class="btn-primary">Добавить первый контакт</a>
+        }
+    </div>
+}
+else
+{
+    <div class="contacts-grid">
+        @foreach (var c in Model)
+        {
+            <div class="contact-card">
+                <div class="contact-avatar">@c.Name[0].ToString().ToUpper()</div>
+                <div class="contact-info">
+                    <div class="contact-name">@c.Name</div>
+                    <div class="contact-phone">@c.Phone</div>
+                    @if (!string.IsNullOrEmpty(c.Email))
+                    {
+                        <div class="contact-email">@c.Email</div>
+                    }
+                    @if (!string.IsNullOrEmpty(c.Note))
+                    {
+                        <div class="contact-note">@c.Note</div>
+                    }
+                </div>
+                <div class="contact-actions">
+                    <a href="/Contacts/Edit/@c.Id" class="btn-edit">✏️</a>
+                    <form method="post" action="/Contacts/Delete/@c.Id" onsubmit="return confirm('Удалить «@c.Name»?')">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn-delete">🗑️</button>
+                    </form>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="count-bar">Всего контактов: <strong>@Model.Count()</strong></div>
+}
